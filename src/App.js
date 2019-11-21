@@ -7,12 +7,18 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.el = null;
+    this.elAge = null;
   }
 
   componentDidMount() {
     this.el.focus();
   }
   setTextInput = el => (this.el = el);
+  setAgeInput = el => (this.elAge = el);
+
+  changeFocusWhenGenderIsChoose = () => {
+    this.elAge.focus();
+  };
 
   render() {
     return (
@@ -39,20 +45,32 @@ class App extends React.Component {
               Choose your gender :
             </label>
             <br />
-            <input id="maleGender" type="checkbox" />
+            <input
+              id="maleGender"
+              type="checkbox"
+              onChange={this.changeFocusWhenGenderIsChoose}
+            />
             Male
             <br />
-            <input id="femaleGender" type="checkbox" />
+            <input
+              id="femaleGender"
+              type="checkbox"
+              onChange={this.changeFocusWhenGenderIsChoose}
+            />
             Female
             <br />
-            <input id="unspecifiedGender" type="checkbox" />
+            <input
+              id="unspecifiedGender"
+              type="checkbox"
+              onChange={this.changeFocusWhenGenderIsChoose}
+            />
             Unspecified
             <br />
           </div>
           <br />
           <div className="ageInfos">
             <label for="age">Enter your age : </label>
-            <input type="text" name="age" id="age" />
+            <input type="text" name="age" id="age" ref={this.setAgeInput} />
           </div>
         </form>
         <h1>SNAKE GAME</h1>
