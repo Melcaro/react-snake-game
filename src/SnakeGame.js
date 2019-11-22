@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { GridSnakeGame } from './GridSnakeGame';
 
 const gridSize = 10;
-const gameSpeed = 1000;
+const gameSpeed = 500;
+
+const generateRandomApplePosition = () => ({
+  x: Math.floor(Math.random() * gridSize),
+  y: Math.floor(Math.random() * gridSize),
+});
 
 export class SnakeGame extends Component {
   state = {
@@ -14,6 +19,7 @@ export class SnakeGame extends Component {
       { x: 0, y: 0 },
     ],
     gameState: 'playing',
+    apple: generateRandomApplePosition(),
   };
 
   gridRef = null;
@@ -49,7 +55,6 @@ export class SnakeGame extends Component {
         x: snakePosition.x + offSetX,
         y: snakePosition.y + offSetY,
       };
-      console.log(bodyPosition);
       const newBodyPosition = [
         snakePosition,
         ...bodyPosition.slice(0, bodyPosition.length - 1),
@@ -64,6 +69,7 @@ export class SnakeGame extends Component {
   loop = () => {
     this.snakeMove();
     this.hasDefeat();
+    this.hasSnakeAteApple();
   };
 
   isWallCollision = position => {
@@ -88,9 +94,20 @@ export class SnakeGame extends Component {
     console.log(this.state.gameState);
   };
 
+  hasSnakeAteApple = () => {
+    this.setState(({ apple, snakePosition }) => {
+      const appleIsEaten =
+        apple.x === snakePosition.x && apple.y === snakePosition.y;
+      if (appleIsEaten) {
+        return { apple: generateRandomApplePosition() };
+      }
+      console.log(apple);
+    });
+  };
+
   render() {
     const {
-      state: { playGroundGrid, snakePosition, bodyPosition, gameState },
+      state: { playGroundGrid, snakePosition, bodyPosition, gameState, apple },
     } = this;
     return (
       <div
@@ -103,6 +120,7 @@ export class SnakeGame extends Component {
           snakePosition={snakePosition}
           bodyPosition={bodyPosition}
           gameState={gameState}
+          apple={apple}
         />
       </div>
     );

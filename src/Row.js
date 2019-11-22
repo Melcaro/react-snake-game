@@ -7,6 +7,7 @@ export const Row = ({
   bodyPosition,
   colIndex,
   gameState,
+  apple,
 }) => {
   return (
     <div
@@ -23,6 +24,7 @@ export const Row = ({
           colIndex={colIndex}
           rowIndex={i}
           gameState={gameState}
+          apple={apple}
         />
       ))}
     </div>

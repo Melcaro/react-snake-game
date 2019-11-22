@@ -10,6 +10,7 @@ export const Cell = ({
   rowIndex,
   bodyPosition,
   gameState,
+  apple,
 }) => {
   const isSnakePosition = isPosition(snakePosition, {
     x: rowIndex,
@@ -23,8 +24,14 @@ export const Cell = ({
     })
   );
 
+  const isApplePosition = isPosition(apple, {
+    x: rowIndex,
+    y: colIndex,
+  });
+
   const headColor = isSnakePosition && 'black';
   const bodyColor = isBodyPosition && 'blue';
+  const appleColor = isApplePosition && 'red';
   const otherColor = 'green';
 
   return (
@@ -32,7 +39,7 @@ export const Cell = ({
       style={{
         flex: '1 1 15%',
 
-        backgroundColor: headColor || bodyColor || otherColor,
+        backgroundColor: headColor || bodyColor || appleColor || otherColor,
       }}
     >
       0

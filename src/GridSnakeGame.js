@@ -6,6 +6,7 @@ export const GridSnakeGame = ({
   snakePosition,
   bodyPosition,
   gameState,
+  apple,
 }) => {
   return (
     <div
@@ -23,6 +24,7 @@ export const GridSnakeGame = ({
           bodyPosition={bodyPosition}
           colIndex={i}
           gameState={gameState}
+          apple={apple}
         />
       ))}
     </div>
