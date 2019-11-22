@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
 import { GridSnakeGame } from './GridSnakeGame';
 
-const gridSize = 10;
-const gameSpeed = 500;
-
-const generateRandomApplePosition = () => ({
-  x: Math.floor(Math.random() * gridSize),
-  y: Math.floor(Math.random() * gridSize),
-});
+import { DefaultState } from './utils/DefaultState';
+import {
+  gridSize,
+  gameSpeed,
+  isWallCollision,
+  defeatConditions,
+} from './Constantes';
+import { generateRandomApplePosition } from './utils/Apple';
+import { setSnakeMoves } from './utils/Snake';
 
 export class SnakeGame extends Component {
-  state = {
-    playGroundGrid: Array(gridSize).fill(Array(gridSize).fill(0)),
-    snakePosition: { x: 0, y: 0 },
-    bodyPosition: [
-      { x: 0, y: 0 },
-      { x: 0, y: 0 },
-    ],
-    snakeSize: 2,
-    lastDirection: 'ArrowDown',
-    gameState: 'playing',
-    apple: generateRandomApplePosition(),
-  };
+  state = DefaultState;
 
   gridRef = null;
 
@@ -31,52 +22,14 @@ export class SnakeGame extends Component {
   }
 
   changeSnakeDirection = e => {
-    console.log(e.key);
+    // pas déplaçable à cause du this.setState
     this.setState({
       lastDirection: e.key,
     });
   };
 
   snakeMove = () => {
-    this.setState(
-      ({ lastDirection, snakePosition, bodyPosition, snakeSize }) => {
-        const offSetX =
-          lastDirection === 'ArrowRight'
-            ? 1
-            : lastDirection === 'ArrowLeft'
-            ? -1
-            : 0;
-        const offSetY =
-          lastDirection === 'ArrowUp'
-            ? -1
-            : lastDirection === 'ArrowDown'
-            ? 1
-            : 0;
-
-        const newSnakePosition = {
-          x: snakePosition.x + offSetX,
-          y: snakePosition.y + offSetY,
-        };
-
-        // Size of the body is modified here according to the difference between its length and its position. He grows only when an apple is eaten, until then, the last position is deleted
-
-        const howMuchTheSnakeBodyMustBeReduced =
-          bodyPosition.length === snakeSize ? 0 : 1;
-
-        const newBodyPosition = [
-          snakePosition,
-          ...bodyPosition.slice(
-            0,
-            bodyPosition.length - howMuchTheSnakeBodyMustBeReduced
-          ),
-        ];
-
-        return {
-          snakePosition: newSnakePosition,
-          bodyPosition: newBodyPosition,
-        };
-      }
-    );
+    this.setState(setSnakeMoves);
   };
 
   loop = () => {
@@ -85,40 +38,25 @@ export class SnakeGame extends Component {
     this.hasSnakeAteApple();
   };
 
-  isWallCollision = position => {
-    return position >= gridSize || position < 0;
+  hasDefeat = () => {
+    this.setState(this.defeatConditions);
   };
 
-  hasDefeat = () => {
-    this.setState(({ snakePosition, bodyPosition, gameState }) => {
-      const isSnakeOffGrid =
-        this.isWallCollision(snakePosition.x) ||
-        this.isWallCollision(snakePosition.y);
-
-      const snakeHasBeatenHimself = bodyPosition.some(
-        position =>
-          position.y === snakePosition.y && position.x === snakePosition.x
-      );
+  whenSnakeEatsAnApple = (prevState, props) => {
+    //pas déplaçable
+    const appleIsEaten =
+      prevState.apple.x === prevState.snakePosition.x &&
+      prevState.apple.y === prevState.snakePosition.y;
+    if (appleIsEaten) {
       return {
-        gameState:
-          isSnakeOffGrid || snakeHasBeatenHimself ? 'Defeat' : 'Playing',
+        snakeSize: this.state.snakeSize + 1,
+        apple: generateRandomApplePosition(),
       };
-    });
-    console.log(this.state.gameState);
+    }
   };
 
   hasSnakeAteApple = () => {
-    this.setState(({ apple, snakePosition, snakeSize }) => {
-      const appleIsEaten =
-        apple.x === snakePosition.x && apple.y === snakePosition.y;
-      if (appleIsEaten) {
-        return {
-          snakeSize: this.state.snakeSize + 1,
-          apple: generateRandomApplePosition(),
-        };
-      }
-      console.log(apple);
-    });
+    this.setState(this.whenSnakeEatsAnApple);
   };
 
   render() {
