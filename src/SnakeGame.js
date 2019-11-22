@@ -13,11 +13,12 @@ export class SnakeGame extends Component {
   state = {
     playGroundGrid: Array(gridSize).fill(Array(gridSize).fill(0)),
     snakePosition: { x: 0, y: 0 },
-    lastDirection: 'ArrowDown',
     bodyPosition: [
       { x: 0, y: 0 },
       { x: 0, y: 0 },
     ],
+    snakeSize: 2,
+    lastDirection: 'ArrowDown',
     gameState: 'playing',
     apple: generateRandomApplePosition(),
   };
@@ -37,33 +38,45 @@ export class SnakeGame extends Component {
   };
 
   snakeMove = () => {
-    this.setState(({ lastDirection, snakePosition, bodyPosition }) => {
-      const offSetX =
-        lastDirection === 'ArrowRight'
-          ? 1
-          : lastDirection === 'ArrowLeft'
-          ? -1
-          : 0;
-      const offSetY =
-        lastDirection === 'ArrowUp'
-          ? -1
-          : lastDirection === 'ArrowDown'
-          ? 1
-          : 0;
+    this.setState(
+      ({ lastDirection, snakePosition, bodyPosition, snakeSize }) => {
+        const offSetX =
+          lastDirection === 'ArrowRight'
+            ? 1
+            : lastDirection === 'ArrowLeft'
+            ? -1
+            : 0;
+        const offSetY =
+          lastDirection === 'ArrowUp'
+            ? -1
+            : lastDirection === 'ArrowDown'
+            ? 1
+            : 0;
 
-      const newSnakePosition = {
-        x: snakePosition.x + offSetX,
-        y: snakePosition.y + offSetY,
-      };
-      const newBodyPosition = [
-        snakePosition,
-        ...bodyPosition.slice(0, bodyPosition.length - 1),
-      ];
-      return {
-        snakePosition: newSnakePosition,
-        bodyPosition: newBodyPosition,
-      };
-    });
+        const newSnakePosition = {
+          x: snakePosition.x + offSetX,
+          y: snakePosition.y + offSetY,
+        };
+
+        // Size of the body is modified here according to the difference between its length and its position. He grows only when an apple is eaten, until then, the last position is deleted
+
+        const howMuchTheSnakeBodyMustBeReduced =
+          bodyPosition.length === snakeSize ? 0 : 1;
+
+        const newBodyPosition = [
+          snakePosition,
+          ...bodyPosition.slice(
+            0,
+            bodyPosition.length - howMuchTheSnakeBodyMustBeReduced
+          ),
+        ];
+
+        return {
+          snakePosition: newSnakePosition,
+          bodyPosition: newBodyPosition,
+        };
+      }
+    );
   };
 
   loop = () => {
@@ -95,11 +108,14 @@ export class SnakeGame extends Component {
   };
 
   hasSnakeAteApple = () => {
-    this.setState(({ apple, snakePosition }) => {
+    this.setState(({ apple, snakePosition, snakeSize }) => {
       const appleIsEaten =
         apple.x === snakePosition.x && apple.y === snakePosition.y;
       if (appleIsEaten) {
-        return { apple: generateRandomApplePosition() };
+        return {
+          snakeSize: this.state.snakeSize + 1,
+          apple: generateRandomApplePosition(),
+        };
       }
       console.log(apple);
     });
