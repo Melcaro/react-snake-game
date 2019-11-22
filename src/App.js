@@ -11,7 +11,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.el.focus();
+    //this.el.focus();
   }
   setTextInput = el => (this.el = el);
   setAgeInput = el => (this.elAge = el);
@@ -22,7 +22,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
+      /*{ <div className="App">
         <h1>FORM</h1>
         <form>
           <div className="lastNameInfos">
@@ -72,7 +72,8 @@ class App extends React.Component {
             <label for="age">Enter your age : </label>
             <input type="text" name="age" id="age" ref={this.setAgeInput} />
           </div>
-        </form>
+        </form> }*/
+      <div>
         <h1>SNAKE GAME</h1>
         <SnakeGame />
       </div>

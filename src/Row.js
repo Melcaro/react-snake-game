@@ -1,7 +1,13 @@
 import React from 'react';
 
 import { Cell } from './Cell.js';
-export const Row = ({ row, snakePosition, colIndex }) => {
+export const Row = ({
+  row,
+  snakePosition,
+  bodyPosition,
+  colIndex,
+  gameState,
+}) => {
   return (
     <div
       style={{
@@ -10,7 +16,14 @@ export const Row = ({ row, snakePosition, colIndex }) => {
       }}
     >
       {row.map((cell, i) => (
-        <Cell cell={cell} snakePosition={snakePosition} colIndex={colIndex} rowIndex={i} />
+        <Cell
+          cell={cell}
+          snakePosition={snakePosition}
+          bodyPosition={bodyPosition}
+          colIndex={colIndex}
+          rowIndex={i}
+          gameState={gameState}
+        />
       ))}
     </div>
   );

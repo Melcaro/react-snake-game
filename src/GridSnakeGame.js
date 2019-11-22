@@ -1,8 +1,12 @@
 import React from 'react';
 import { Row } from './Row';
 
-export const GridSnakeGame = ({ grid, snakePosition }) => {
-  console.log(snakePosition);
+export const GridSnakeGame = ({
+  grid,
+  snakePosition,
+  bodyPosition,
+  gameState,
+}) => {
   return (
     <div
       style={{
@@ -13,7 +17,13 @@ export const GridSnakeGame = ({ grid, snakePosition }) => {
       }}
     >
       {grid.map((row, i) => (
-        <Row row={row} snakePosition={snakePosition} colIndex={i} />
+        <Row
+          row={row}
+          snakePosition={snakePosition}
+          bodyPosition={bodyPosition}
+          colIndex={i}
+          gameState={gameState}
+        />
       ))}
     </div>
   );
