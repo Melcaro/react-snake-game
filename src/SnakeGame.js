@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import { GridSnakeGame } from './GridSnakeGame';
 
 import { DefaultState } from './utils/DefaultState';
-import {
-  gridSize,
-  gameSpeed,
-  isWallCollision,
-  defeatConditions,
-} from './Constantes';
+import { gameSpeed, defeatConditions } from './Constantes';
 import { generateRandomApplePosition } from './utils/Apple';
 import { setSnakeMoves } from './utils/Snake';
+import { runInThisContext } from 'vm';
 
 export class SnakeGame extends Component {
   state = DefaultState;
@@ -20,6 +16,10 @@ export class SnakeGame extends Component {
     this.gridRef.focus();
     setInterval(this.loop, gameSpeed);
   }
+
+  restartTheGame = () => {
+    this.setState(DefaultState);
+  };
 
   changeSnakeDirection = e => {
     // pas déplaçable à cause du this.setState
@@ -39,7 +39,7 @@ export class SnakeGame extends Component {
   };
 
   hasDefeat = () => {
-    this.setState(this.defeatConditions);
+    this.setState(defeatConditions);
   };
 
   whenSnakeEatsAnApple = (prevState, props) => {
@@ -51,6 +51,7 @@ export class SnakeGame extends Component {
       return {
         snakeSize: this.state.snakeSize + 1,
         apple: generateRandomApplePosition(),
+        score: this.state.score + 1,
       };
     }
   };
@@ -60,23 +61,56 @@ export class SnakeGame extends Component {
   };
 
   render() {
+    //console.log(this.state.gameState);
+
     const {
-      state: { playGroundGrid, snakePosition, bodyPosition, gameState, apple },
+      state: {
+        playGroundGrid,
+        snakePosition,
+        bodyPosition,
+        gameState,
+        apple,
+        score,
+      },
     } = this;
-    return (
-      <div
-        tabIndex="0"
-        ref={el => (this.gridRef = el)}
-        onKeyDown={this.changeSnakeDirection}
-      >
-        <GridSnakeGame
-          grid={playGroundGrid}
-          snakePosition={snakePosition}
-          bodyPosition={bodyPosition}
-          gameState={gameState}
-          apple={apple}
-        />
-      </div>
-    );
+
+    if (gameState === 'Playing') {
+      return (
+        <div
+          tabIndex="0"
+          ref={el => (this.gridRef = el)}
+          onKeyDown={this.changeSnakeDirection}
+        >
+          <GridSnakeGame
+            grid={playGroundGrid}
+            snakePosition={snakePosition}
+            bodyPosition={bodyPosition}
+            gameState={gameState}
+            apple={apple}
+            score={score}
+          />
+        </div>
+      );
+    } else if (gameState === 'Defeat') {
+      return (
+        <div
+          style={{
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'black',
+            color: 'white',
+            fontSize: '100px',
+          }}
+        >
+          <div style={{ color: 'white', fontSize: '100px' }}>GAME OVER</div>
+          <button
+            style={{ BackgroundColor: 'white', fontSize: '40px' }}
+            onClick={this.restartTheGame}
+          >
+            PLAY AGAIN
+          </button>
+        </div>
+      );
+    }
   }
 }

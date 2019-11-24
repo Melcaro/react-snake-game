@@ -7,26 +7,32 @@ export const GridSnakeGame = ({
   bodyPosition,
   gameState,
   apple,
+  score,
 }) => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        margin: '5%',
-      }}
-    >
-      {grid.map((row, i) => (
-        <Row
-          row={row}
-          snakePosition={snakePosition}
-          bodyPosition={bodyPosition}
-          colIndex={i}
-          gameState={gameState}
-          apple={apple}
-        />
-      ))}
+    <div>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          margin: '5%',
+        }}
+      >
+        {grid.map((row, i) => (
+          <Row
+            row={row}
+            snakePosition={snakePosition}
+            bodyPosition={bodyPosition}
+            colIndex={i}
+            gameState={gameState}
+            apple={apple}
+          />
+        ))}
+      </div>
+      <div style={{ marginLeft: '10%', fontSize: '15px', fontWeight: 'bold' }}>
+        SCORE : {score}
+      </div>
     </div>
   );
 };
