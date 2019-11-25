@@ -32,17 +32,15 @@ export const Cell = ({
   const headColor = isSnakePosition && 'black';
   const bodyColor = isBodyPosition && 'blue';
   const appleColor = isApplePosition && 'red';
-  const otherColor = 'green';
+  const otherColor = '#C2C5CC';
 
   return (
     <div
       style={{
-        flex: '1 1 15%',
+        flex: '1 1 5%',
 
         backgroundColor: headColor || bodyColor || appleColor || otherColor,
       }}
-    >
-      0
-    </div>
+    ></div>
   );
 };

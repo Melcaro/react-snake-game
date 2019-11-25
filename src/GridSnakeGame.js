@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row } from './Row';
 
+import { GridContainer, GridStyle, Score } from './Styles';
 export const GridSnakeGame = ({
   grid,
   snakePosition,
@@ -10,15 +11,9 @@ export const GridSnakeGame = ({
   score,
 }) => {
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          margin: '5%',
-        }}
-      >
+    <GridContainer>
+      <Score>SCORE : {score}</Score>
+      <GridStyle>
         {grid.map((row, i) => (
           <Row
             row={row}
@@ -29,10 +24,7 @@ export const GridSnakeGame = ({
             apple={apple}
           />
         ))}
-      </div>
-      <div style={{ marginLeft: '10%', fontSize: '15px', fontWeight: 'bold' }}>
-        SCORE : {score}
-      </div>
-    </div>
+      </GridStyle>
+    </GridContainer>
   );
 };

@@ -5,17 +5,34 @@ import { DefaultState } from './utils/DefaultState';
 import { gameSpeed, defeatConditions } from './Constantes';
 import { generateRandomApplePosition } from './utils/Apple';
 import { setSnakeMoves } from './utils/Snake';
-import { runInThisContext } from 'vm';
+
+import {
+  GameOverContainer,
+  PlayContainer,
+  PlayButton,
+  GameOverTitle,
+  PlayAgainButton,
+  AppTitle,
+} from './Styles';
 
 export class SnakeGame extends Component {
   state = DefaultState;
-
   gridRef = null;
+  intervalId = null;
 
   componentDidMount() {
     this.gridRef.focus();
-    setInterval(this.loop, gameSpeed);
   }
+
+  startTheGame = () => {
+    this.intervalId = setInterval(this.loop, gameSpeed);
+  };
+
+  componentDidUpdate = prevState => {
+    if (this.state.gameState === 'Defeat') {
+      clearInterval(this.componentDidMount);
+    }
+  };
 
   restartTheGame = () => {
     this.setState(DefaultState);
@@ -39,7 +56,9 @@ export class SnakeGame extends Component {
   };
 
   hasDefeat = () => {
-    this.setState(defeatConditions);
+    this.setState(defeatConditions, () => {
+      this.state.gameState === 'Defeat' && clearInterval(this.intervalId);
+    });
   };
 
   whenSnakeEatsAnApple = (prevState, props) => {
@@ -61,7 +80,7 @@ export class SnakeGame extends Component {
   };
 
   render() {
-    //console.log(this.state.gameState);
+    console.log(this.state.gameState);
 
     const {
       state: {
@@ -76,11 +95,13 @@ export class SnakeGame extends Component {
 
     if (gameState === 'Playing') {
       return (
-        <div
+        <PlayContainer
           tabIndex="0"
           ref={el => (this.gridRef = el)}
           onKeyDown={this.changeSnakeDirection}
         >
+          <AppTitle>SNAKE GAME</AppTitle>
+          <PlayButton onClick={this.startTheGame}>PLAY</PlayButton>
           <GridSnakeGame
             grid={playGroundGrid}
             snakePosition={snakePosition}
@@ -89,11 +110,11 @@ export class SnakeGame extends Component {
             apple={apple}
             score={score}
           />
-        </div>
+        </PlayContainer>
       );
     } else if (gameState === 'Defeat') {
       return (
-        <div
+        <GameOverContainer
           style={{
             width: '100vw',
             height: '100vh',
@@ -102,14 +123,12 @@ export class SnakeGame extends Component {
             fontSize: '100px',
           }}
         >
-          <div style={{ color: 'white', fontSize: '100px' }}>GAME OVER</div>
-          <button
-            style={{ BackgroundColor: 'white', fontSize: '40px' }}
-            onClick={this.restartTheGame}
-          >
+          <GameOverTitle>GAME OVER</GameOverTitle>
+          <div>Score : {score}</div>
+          <PlayAgainButton onClick={this.restartTheGame}>
             PLAY AGAIN
-          </button>
-        </div>
+          </PlayAgainButton>
+        </GameOverContainer>
       );
     }
   }

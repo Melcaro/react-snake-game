@@ -17,6 +17,7 @@ const defeatConditions = (prevState, props) => {
   );
   return {
     gameState: isSnakeOffGrid || snakeHasBeatenHimself ? 'Defeat' : 'Playing',
+    
   };
 };
 

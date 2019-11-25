@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { Cell } from './Cell.js';
+
+import { RowStyle } from './Styles';
 export const Row = ({
   row,
   snakePosition,
@@ -10,12 +12,7 @@ export const Row = ({
   apple,
 }) => {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-    >
+    <RowStyle>
       {row.map((cell, i) => (
         <Cell
           cell={cell}
@@ -27,6 +24,6 @@ export const Row = ({
           apple={apple}
         />
       ))}
-    </div>
+    </RowStyle>
   );
 };
