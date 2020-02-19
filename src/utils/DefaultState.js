@@ -10,6 +10,7 @@ export const DefaultState = {
   ],
   snakeSize: 2,
   lastDirection: 'ArrowDown',
+  wantedDirection: 'ArrowDown',
   gameState: 'Playing',
   apple: generateRandomApplePosition(),
   score: 0,

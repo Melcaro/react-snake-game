@@ -27,7 +27,9 @@ export class SnakeGame extends Component {
   startTheGame = () => {
     this.intervalId = setInterval(this.loop, gameSpeed);
   };
-
+  // pauseTheGame = () => {
+  //   this.intervalId && clearInterval(this.intervalId);
+  // };
   componentDidUpdate = prevState => {
     if (this.state.gameState === 'Defeat') {
       clearInterval(this.componentDidMount);
@@ -39,7 +41,25 @@ export class SnakeGame extends Component {
   };
 
   changeSnakeDirection = e => {
-    // pas déplaçable à cause du this.setState
+    // if (
+    //   ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].includes(
+    //     wantedDirection
+    //   )
+    // ) {
+    //   this.setState(
+    //     ({ lastDirection, wantedDirection: oldWantedDirection }) => {
+    //       if (lastDirection === oldWantedDirection) {
+    //         return {
+    //           wantedDirection,
+    //         };
+    //       }
+    //       return null;
+    //     }
+    //   );
+    // } else if (keyCode === 32) {
+    //   this.startTheGame();
+    // }
+
     this.setState({
       lastDirection: e.key,
     });
@@ -62,7 +82,6 @@ export class SnakeGame extends Component {
   };
 
   whenSnakeEatsAnApple = (prevState, props) => {
-    //pas déplaçable
     const appleIsEaten =
       prevState.apple.x === prevState.snakePosition.x &&
       prevState.apple.y === prevState.snakePosition.y;
@@ -80,8 +99,6 @@ export class SnakeGame extends Component {
   };
 
   render() {
-    console.log(this.state.gameState);
-
     const {
       state: {
         playGroundGrid,
