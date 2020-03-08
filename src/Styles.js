@@ -16,6 +16,7 @@ export const PlayContainer = styled.div`
   align-items: center;
   width: 95vw;
   height: 90vh;
+  margin: 0 auto;
 `;
 
 export const PlayButton = styled.button`
@@ -26,8 +27,8 @@ export const PlayButton = styled.button`
 `;
 
 export const GameOverContainer = styled.div`
-  width: 100vw;
-  height: 95vh;
+  width: 99vw;
+  height: 99vh;
   background-color: black;
   color: white;
   font-size: 100px;
